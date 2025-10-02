@@ -1,13 +1,31 @@
-ddggcreate database company_paycheck;
+-- create database
+create database company_paycheck;
 use company_paycheck;
 show databases;
 
-create table staff_details(age int, job varchar(30), marital varchar(30), education varchar(30), `default` varchar(30), 
-balance int, housing varchar(30), loan varchar(30), contact varchar(30), `day` int, `month` varchar(30), duration int, campaign int, pdays int,
-previous int, outcome varchar(30), y varchar(30));
+-- table creation
+create table staff_details(
+age int, 
+job varchar(30), 
+marital varchar(30), 
+education varchar(30), 
+`default` varchar(30), 
+balance int, 
+housing varchar(30),
+loan varchar(30), 
+contact varchar(30), 
+`day` int, 
+`month` varchar(30),
+duration int, 
+campaign int,
+pdays int,
+previous int,
+outcome varchar(30), 
+y varchar(30));
 
 select * from staff_details;
 
+-- insert into table
 insert into staff_details values(44,'technician','single','secondary','no',29,'yes','no','unknown',5,'may',151,1,-1,0,'unknown','no'), 
 (33,'entrepreneur','married','secondary','no',2,'yes','yes','unkown',5,'may',76,1,-1,0,'unknown','no'), 
 (47,'blue_collar','married','unknown','no',1506,'yes','no','unknown',5,'may',92,1,-1,0,'unknown','no'), 
@@ -102,29 +120,61 @@ insert into staff_details values(44,'technician','single','secondary','no',29,'y
 (60,"admin.","married","secondary","no",290,"yes","no","unknown",5,"may",583,1,-1,0,"unknown","no");
 
 
-select *  from staff_details;
-
-select sum(balance) from staff_details;
-select avg(balance) from staff_details;
-select job from staff_details where balance = (select max(balance) from staff_details);
-select job from staff_details where balance = (select min(balance) from staff_details);
-select * from staff_details where loan = 'yes';
-select avg(balance) from staff_details where job = 'admin.' ;
-select * from staff_details where job = 'unknown' and age <45;
-select * from staff_details where education = 'primary' and job = 'jobless';
---- have not solved this number yet
-select sum(balance) from staff_details where housing = 'no';
+-- Buiness Questions
 
 
+-- What is the total balance of all staff?
+select sum(balance) 
+from staff_details;
 
+-- What is the average account balance across all staff?
+select avg(balance)
+from staff_details;
 
+-- Which job has the employee with the highest balance?
+select job 
+from staff_details 
+where balance = (select max(balance) from staff_details);
 
+-- Which job has the employee with the lowest balance?
+select job 
+from staff_details 
+where balance = (select min(balance) from staff_details);
 
+-- Which employees currently have a personal loan?
+select * 
+from staff_details 
+where loan = 'yes';
 
+-- What is the average balance of staff working in administration?
+select avg(balance) 
+from staff_details 
+where job = 'admin.';
 
+-- Which employees have their job listed as "unknown" and are younger than 45?
+select * 
+from staff_details 
+where job = 'unknown' and age <45;
 
+-- Which employees have a primary education level and are jobless?
+select * 
+from staff_details  
+where education = 'primary' and job = 'jobless';
+
+-- What is the total balance of employees who do not own housing? ⚠️ (unsolved in your script)
+select sum(balance) 
+from staff_details 
+where housing = 'no';
 
 -- What were the top 5 orders that spent the most money?
+SELECT orders.order_id, SUM(menu_items.price) AS total_spent
+FROM orders 
+INNER JOIN menu_items
+    ON orders.item_id = menu_items.menu_item_id
+GROUP BY orders.order_id
+ORDER BY total_spent DESC
+LIMIT 5;
+
 select orders.order_id, sum(menu_items.price) as max_money, menu_items.category, menu_items.item_name
 from orders 
 inner join menu_items
@@ -132,15 +182,4 @@ on orders.item_id = menu_items.menu_item_id
 group by orders.order_id, menu_items.category, menu_items.item_name
 order by max_money desc
 limit 5;
-
-
-
-SELECT orders.order_id, SUM(menu_items.price) AS total_spent
-FROM orders 
-INNER JOIN menu_items
-on orders.item_id = menu_items.menu_item_id
-GROUP BY orders.order_id
-ORDER BY total_spent DESC
-LIMIT 5;
-
 
